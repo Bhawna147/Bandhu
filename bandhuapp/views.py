@@ -33,9 +33,23 @@ from openpyxl import Workbook
 from openpyxl.styles import Font
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-
-
+from django.core.paginator import Paginator
+from .models import RecentActivity 
 # Create your views here.
+
+def notification_page(request):
+    recent_act_list = RecentActivity.objects.all()
+    #set up pagination
+    p = Paginator(RecentActivity.objects.all() , 9 )
+    page = request.GET.get('page')
+    recentActivities = p.get_page(page)
+    
+    return render( request , 'notification_page.html' , 
+                   {'recent_act_list' : recent_act_list , 
+                     'recentActivities' : recentActivities })
+    # print("hello")
+    # return HttpResponseRedirect('notification_page.html')
+    # return render(request,'notification_page.html')
 
 def index(request):
     if request.user.is_authenticated and not Profile.objects.filter(user=request.user).exists():
@@ -251,4 +265,10 @@ def external_link(request,hash):
             return HttpResponseRedirect('/')
 
     return HttpResponseRedirect('/')
+
+
+# def notification_page(request):
+#     print("hello")
+#     # return HttpResponseRedirect('notification_page.html')
+#     # return render(request,'notification_page.html')
 
