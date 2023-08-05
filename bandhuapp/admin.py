@@ -1,11 +1,17 @@
 from django.contrib import admin
 from django.utils.html import format_html, urlencode
+from embed_video.admin import AdminVideoMixin
 from .models import (
     Profile, RecentActivity, Photo, Initiatives, AboutUs,
     Mission, SanskarCarousel, SwarajCarousel,
     SwabalambanCarousel, UrlData, Volunteer, Gallery, Contact,
-    HomePage, CurrentUpdates
+    HomePage, CurrentUpdates, Videos
 )
+
+class MyModelAdmin(AdminVideoMixin , admin.ModelAdmin):
+    pass
+
+admin.site.register( Videos , MyModelAdmin)
 
 # Register your models here.
 

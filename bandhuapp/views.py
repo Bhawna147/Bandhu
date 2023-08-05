@@ -25,7 +25,8 @@ from applications.charitywork.models import Activity as CharityActivity
 from .models import (
     Profile, Photo, Initiatives, AboutUs,
     Mission, Volunteer, Gallery, Contact,
-    HomePage, UrlData, CurrentUpdates
+    HomePage, UrlData, CurrentUpdates,
+    Videos
 )
 from .templatetags import permissions as temp_perms  # Template permissions
 
@@ -38,11 +39,16 @@ from .models import RecentActivity
 
 
 # Create your views here.
+# def vid(request):
+#     videos = Videos.objects.all()
+#     context = {
+#         'videos' : videos
+#     }
 
 def notification_page(request):
     recent_act_list = RecentActivity.objects.all()
     #set up pagination
-    p = Paginator(recent_act_list  , 9)
+    p = Paginator(recent_act_list  , 4)
     page = request.GET.get('page')
     recentActivities = p.get_page(page)
     return render( request , 'notification_page.html' , 
@@ -66,7 +72,8 @@ def index(request):
 
     recent_events.sort(key=lambda act: act.date, reverse=True)
     recent_events = recent_events[:10]
-
+    # print("helloe")
+    # print(Videos.objects.all())
     context = {
         'initiatives': Initiatives.objects.all().first(),
         'about': AboutUs.objects.all().first(),
@@ -78,7 +85,9 @@ def index(request):
         'curr_date': datetime.now().date(),
         'seven_day_delta': datetime.now().date() - timedelta(days=7),
         'content': HomePage.objects.all().first(),
-        'current_updates': CurrentUpdates.objects.all()[:10]
+        'current_updates': CurrentUpdates.objects.all()[:10],
+        'yt_videos' : Videos.objects.all()
+        
     }
     return render(request, 'landing_page.html', context)
 

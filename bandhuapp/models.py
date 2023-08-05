@@ -5,6 +5,11 @@ from django.dispatch import receiver
 from django.utils import timezone
 from .helpers import _createHash
 from accounts.models import User
+from django.db import models
+from embed_video.fields import EmbedVideoField
+
+class Videos(models.Model): 
+    video = EmbedVideoField()
 
 # Create your models here.
 
